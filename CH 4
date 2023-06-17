@@ -1,0 +1,99 @@
+from typing import List, Tuple, Callable
+import math
+
+Vector = List[float]
+Matrix = List[Vector]
+
+def add(v: Vector, w: Vector) -> Vector:
+    assert len(v) == len(w)
+    return [vi + wi for vi, wi in zip(v, w)]
+
+def subtract(v: Vector, w: Vector) -> Vector:
+    assert len(v) == len(w)
+    return [vi - wi for vi, wi in zip(v, w)]
+
+def vector_sum(vectors: List[Vector]) -> Vector:
+    assert vectors
+    num_elements = len(vectors[0])
+    assert all(len(v) == num_elements for v in vectors)
+    return [sum(vector[i] for vector in vectors) for i in range(num_elements)]
+
+def scalar_multiply(c: float, v: Vector) -> Vector:
+    return [c * vi for vi in v]
+
+def vector_mean(vectors: List[Vector]) -> Vector:
+    n = len(vectors)
+    return scalar_multiply(1/n, vector_sum(vectors))
+
+def dot(v: Vector, w: Vector) -> float:
+    assert len(v) == len(w)
+    return sum(vi * wi for vi, wi in zip(v, w))
+
+def sum_of_squares(v: Vector) -> float:
+    return dot(v, v)
+
+def magnitude(v: Vector) -> float:
+    return math.sqrt(sum_of_squares(v))
+
+def squared_distance(v: Vector, w: Vector) -> float:
+    return sum_of_squares(subtract(v, w))
+
+def distance(v: Vector, w: Vector) -> float:
+    return math.sqrt(squared_distance(v, w))
+
+def shape(A: Matrix) -> Tuple[int, int]:
+    num_rows = len(A)
+    num_cols = len(A[0]) if A else 0
+    return num_rows, num_cols
+
+def get_row(A: Matrix, i: int) -> Vector:
+    return A[i]
+
+def get_column(A: Matrix, j: int) -> Vector:
+    return [A_i[j] for A_i in A]
+
+def make_matrix(num_rows: int, num_cols: int, entry_fn: Callable[[int, int], float]) -> Matrix:
+    return [[entry_fn(i, j) for j in range(num_cols)] for i in range(num_rows)]
+
+def identity_matrix(n: int) -> Matrix:
+    return make_matrix(n, n, lambda i, j: 1 if i == j else 0)
+
+    # Example usage of the functions
+
+# Vector operations
+v1 = [1, 2, 3]
+v2 = [4, 5, 6]
+v_sum = vector_sum([v1, v2])
+print("Vector Sum:", v_sum)
+
+v_diff = subtract(v1, v2)
+print("Vector Difference:", v_diff)
+
+v_mean = vector_mean([v1, v2])
+print("Vector Mean:", v_mean)
+
+dot_product = dot(v1, v2)
+print("Dot Product:", dot_product)
+
+squared_sum = sum_of_squares(v1)
+print("Sum of Squares:", squared_sum)
+
+v_magnitude = magnitude(v1)
+print("Vector Magnitude:", v_magnitude)
+
+# Matrix operations
+A = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+A_shape = shape(A)
+print("Matrix Shape:", A_shape)
+
+row = get_row(A, 1)
+print("Row:", row)
+
+column = get_column(A, 2)
+print("Column:", column)
+
+identity = identity_matrix(3)
+print("Identity Matrix:")
+for row in identity:
+    print(row)
+
