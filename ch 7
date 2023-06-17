@@ -145,3 +145,39 @@ mu_1, sigma_1 = normal_approximation_to_binomial(1000, 0.55)
 power = normal_power(1000, 0.5, lo, hi, mu_1, sigma_1)
 
 print("Power:", power)
+
+
+
+
+P Values 
+
+def two_sided_pvalue(x: float, mu: float = 0, sigma: float = 1) -> float:
+    if x >= mu:
+        # x is greater than the mean, so the tail is everything greater than x
+        return 2 * normal_probability_above(x, mu, sigma)
+    else:
+        # x is less than the mean, so the tail is everything less than x
+        return 2 * normal_probability_below(x, mu, sigma)
+
+two_sided_pvalue(529.5, mu=0, sigma=1)  # 0.062
+
+import random
+
+extreme_value_count = 0
+for _ in range(1000):
+    num_heads = sum(1 if random.random() < 0.5 else 0 for _ in range(1000))
+    if num_heads >= 530 or num_heads <= 470:
+        extreme_value_count += 1
+
+# p-value was 0.062 => ~62 extreme values out of 1000
+assert 59 < extreme_value_count < 65, f"{extreme_value_count}"
+
+
+
+In the code above:
+
+two_sided_pvalue(x, mu, sigma): This function calculates the two-sided p-value for a given x value in a normal distribution with mean mu and standard deviation sigma. If x is greater than or equal to mu, it calculates the tail probability above x using normal_probability_above and doubles it (since it's a two-sided test). Otherwise, if x is less than mu, it calculates the tail probability below x using normal_probability_below and doubles it. The resulting p-value is returned.
+
+extreme_value_count: This variable keeps track of the count of extreme values in a binomial distribution experiment. In each iteration of the loop, it generates 1000 random numbers between 0 and 1 using random.random() and counts the number of heads (values less than 0.5) in the sequence. If the number of heads is either greater than or equal to 530 or less than or equal to 470, it increments the extreme_value_count by 1.
+
+The final assertion checks that the extreme_value_count falls within the expected range of 59 to 65, indicating that the experiment generated approximately 62 extreme values out of 1000 trials.
