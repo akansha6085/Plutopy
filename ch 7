@@ -106,3 +106,42 @@ mu_1, sigma_1 = normal_approximation_to_binomial(1000, 0.55)
 # which will happen when X is still in our original interval
 type_2_probability = normal_probability_between(lo, hi, mu_1, sigma_1)
 power = 1 - type_2_probability
+
+
+WITH EXAMPLE 
+
+from typing import Tuple
+import math
+from scratch.probability import normal_cdf, normal_probability_between
+
+def normal_approximation_to_binomial(n: int, p: float) -> Tuple[float, float]:
+    """Returns mu and sigma corresponding to a Binomial(n, p)"""
+    mu = p * n
+    sigma = math.sqrt(p * (1 - p) * n)
+    return mu, sigma
+
+def normal_two_sided_bounds(probability: float, mu: float = 0, sigma: float = 1) -> Tuple[float, float]:
+    """Returns the symmetric (about the mean) bounds that contain the specified probability"""
+    tail_probability = (1 - probability) / 2
+
+    # Upper bound should have tail probability above it
+    upper_bound = normal_lower_bound(tail_probability, mu, sigma)
+
+    # Lower bound should have tail probability below it
+    lower_bound = normal_upper_bound(tail_probability, mu, sigma)
+
+    return lower_bound, upper_bound
+
+def normal_power(n: int, p: float, lo: float, hi: float, mu_1: float, sigma_1: float) -> float:
+    """Calculates the power of a hypothesis test"""
+    type_2_probability = normal_probability_between(lo, hi, mu_1, sigma_1)
+    power = 1 - type_2_probability
+    return power
+
+# Example usage
+mu_0, sigma_0 = normal_approximation_to_binomial(1000, 0.5)
+lo, hi = normal_two_sided_bounds(0.95, mu_0, sigma_0)
+mu_1, sigma_1 = normal_approximation_to_binomial(1000, 0.55)
+power = normal_power(1000, 0.5, lo, hi, mu_1, sigma_1)
+
+print("Power:", power)
