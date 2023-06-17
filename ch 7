@@ -1,0 +1,44 @@
+import matplotlib.pyplot as plt
+import random
+
+# Normal Distribution
+x_values = [x / 10 for x in range(-50, 51)]
+pdf_values = [normal_pdf(x, mu=0, sigma=1) for x in x_values]
+cdf_values = [normal_cdf(x, mu=0, sigma=1) for x in x_values]
+
+# Plot the PDF and CDF of the Normal Distribution
+plt.figure(figsize=(10, 4))
+
+plt.subplot(1, 2, 1)
+plt.plot(x_values, pdf_values)
+plt.xlabel('x')
+plt.ylabel('Probability Density')
+plt.title('Normal Distribution PDF')
+
+plt.subplot(1, 2, 2)
+plt.plot(x_values, cdf_values)
+plt.xlabel('x')
+plt.ylabel('Cumulative Probability')
+plt.title('Normal Distribution CDF')
+
+plt.tight_layout()
+plt.show()
+
+# Binomial Distribution
+n = 20
+p = 0.5
+num_trials = 1000
+
+# Simulate Binomial trials
+binomial_values = [binomial(n, p) for _ in range(num_trials)]
+
+# Count the occurrences of each value
+value_counts = [binomial_values.count(k) for k in range(n+1)]
+
+# Plot the Binomial Distribution
+plt.bar(range(n+1), value_counts)
+plt.xlabel('k')
+plt.ylabel('Count')
+plt.title('Binomial Distribution')
+
+plt.show()
