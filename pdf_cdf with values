@@ -1,0 +1,24 @@
+import matplotlib.pyplot as plt
+
+# Generate a range of values for x
+x_values = [x / 10 for x in range(-10, 21)]
+
+# Calculate the PDF and CDF values for each x
+pdf_values = [uniform_pdf(x) for x in x_values]
+cdf_values = [uniform_cdf(x) for x in x_values]
+
+# Plot the PDF
+plt.plot(x_values, pdf_values, label='PDF')
+plt.xlabel('x')
+plt.ylabel('Probability Density')
+plt.title('Uniform Distribution PDF')
+plt.legend()
+plt.show()
+
+# Plot the CDF
+plt.plot(x_values, cdf_values, label='CDF')
+plt.xlabel('x')
+plt.ylabel('Cumulative Probability')
+plt.title('Uniform Distribution CDF')
+plt.legend()
+plt.show()
